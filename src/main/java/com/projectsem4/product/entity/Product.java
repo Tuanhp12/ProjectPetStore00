@@ -8,13 +8,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.sql.Date;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "product")
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
