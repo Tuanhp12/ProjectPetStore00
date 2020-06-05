@@ -1,25 +1,43 @@
 package com.projectsem4.product.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
+@Table(name = "customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Email
+    @Size(max = 100)
+    @Column(unique = true)
     private String email;
+
+    @Size(max = 20)
     private String name;
+
+    @Size(max = 20)
     private String phone;
+
+    @Size(max = 100)
     private String address;
+
+    @Size(max = 30)
     private String city;
+
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
+    private Collection<Order> orders;
 
     public Customer() {
     }
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id")
-    private Collection<Order> orders;
 
     public Long getId() {
         return id;
