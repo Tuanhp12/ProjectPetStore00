@@ -8,12 +8,12 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
+@Table(name = "quantityUpdate")
 public class QuantityUpdate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_at", nullable = false)
     @CreatedDate
     private Date dateUpdate;
@@ -21,10 +21,10 @@ public class QuantityUpdate {
     @NotNull
     private int amount;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnore
-    private Product product;
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "product_id", nullable = false)
+//    @JsonIgnore
+//    private Product product;
 
     public QuantityUpdate() {
     }
@@ -53,11 +53,5 @@ public class QuantityUpdate {
         this.amount = amount;
     }
 
-    public Product getProduct() {
-        return product;
-    }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 }

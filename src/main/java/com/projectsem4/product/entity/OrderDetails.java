@@ -8,15 +8,16 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
+@Table(name = "orderDetails")
 public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "list_order_id", nullable = false)
     @JsonIgnore
-    private Order order;
+    private ListOrder listOrder;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
@@ -40,14 +41,6 @@ public class OrderDetails {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
     public Product getProduct() {

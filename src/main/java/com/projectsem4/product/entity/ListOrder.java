@@ -1,19 +1,15 @@
 package com.projectsem4.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.catalina.util.CustomObjectInputStream;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "order")
-public class Order {
+public class ListOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,14 +20,16 @@ public class Order {
     @NotNull
     private double totalPrice;
 
-    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_at", nullable = false)
+    @CreatedDate
     private Date dateCreated;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<OrderDetails> orderDetails;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -39,7 +37,7 @@ public class Order {
     @JsonIgnore
     private Customer customer;
 
-    public Order() {
+    public ListOrder() {
     }
 
     public Long getId() {
@@ -97,6 +95,4 @@ public class Order {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
-
 }

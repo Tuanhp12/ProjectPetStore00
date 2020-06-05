@@ -33,7 +33,7 @@ public class Customer {
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
-    private Collection<Order> orders;
+    private Collection<ListOrder> orders;
 
     public Customer() {
     }

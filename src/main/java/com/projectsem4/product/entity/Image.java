@@ -1,5 +1,7 @@
 package com.projectsem4.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.*;
 
@@ -19,6 +21,11 @@ public class Image {
 
     @Column(name = "picByte", length = 1000)
     private byte[] picByte;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonIgnore
+    private Product product;
 
     public String getName() {
         return name;
@@ -59,5 +66,13 @@ public class Image {
 
     public void setPicByte(byte[] picByte) {
         this.picByte = picByte;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
