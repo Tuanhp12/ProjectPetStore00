@@ -8,30 +8,25 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
-public class OrderDetails {
+public class QuantityUpdate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "order_id", nullable = false)
-    @JsonIgnore
-    private Order order;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "update_at", nullable = false)
+    @CreatedDate
+    private Date dateUpdate;
+
+    @NotNull
+    private int amount;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     @JsonIgnore
     private Product product;
 
-    @NotNull
-    private int amount;
-
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "update_at")
-//    @CreatedDate
-//    private Date dateUpdate;
-
-    public OrderDetails() {
+    public QuantityUpdate() {
     }
 
     public Long getId() {
@@ -42,20 +37,12 @@ public class OrderDetails {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public Date getDateUpdate() {
+        return dateUpdate;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setDateUpdate(Date dateUpdate) {
+        this.dateUpdate = dateUpdate;
     }
 
     public int getAmount() {
@@ -64,5 +51,13 @@ public class OrderDetails {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
