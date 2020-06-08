@@ -29,7 +29,7 @@ public class ListOrder {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "listOrder")
     private Collection<OrderDetails> orderDetails;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
