@@ -23,6 +23,7 @@ public class Customer {
     private String name;
 
     @Size(max = 20)
+    @Column(unique = true)
     private String phone;
 
     @Size(max = 100)
