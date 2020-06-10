@@ -28,8 +28,16 @@ public class ProductService {
     }
 
     public Optional<Product> save(Long categoryId, Product product){
+
         return categoryRepository.findById(categoryId).map(category -> {
             product.setCategory(category);
+            product.setCodeId(returnRandomId(product.getName()));
+            if(product.getPrice() < 0){
+                product.setPrice(0);
+            }
+            if(product.getCurrentQuantity() < 0){
+                product.setCurrentQuantity(0);
+            }
 //            if(product.getDateSaleStart().compareTo(product.getDateSaleEnd()) >= 0){
 //                throw new ResourceNotFoundException("End date cant occurs Start date or equal");
 //            }
@@ -60,5 +68,20 @@ public class ProductService {
             productRepository.delete(product);
             return true;
         });
+    }
+
+    public String returnRandomId(String nameProduct){
+        String defaultFirstTwoCharacter = nameProduct.substring(0,2);
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                     + "0123456789"
+                                     + "abcdefghijklmnopqrstuvxyz";
+
+        StringBuilder s = new StringBuilder();
+        int x;
+        for( x = 0; x < 5; x++) {
+            int index = (int) (AlphaNumericString.length() * Math.random());
+            s.append(AlphaNumericString.charAt(index));
+        }
+        return defaultFirstTwoCharacter + s.toString();
     }
 }
