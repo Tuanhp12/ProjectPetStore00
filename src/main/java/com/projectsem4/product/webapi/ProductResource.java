@@ -18,15 +18,14 @@ public class ProductResource {
         this.productService = productService;
     }
 
-    @GetMapping("/categories/{categoryId}/products")
-    public List<Product> getAllProducts(@PathVariable Long categoryId){
-        return productService.getAllProduct(categoryId);
+    @GetMapping("/")
+    public List<Product> getAllProducts(){
+        return productService.getAllProduct();
     }
 
-    @PostMapping("/categories/{categoryId}/products")
-    public Optional<Product> product(@PathVariable (value = "categoryId") Long categoryId,
-                                    @Valid @RequestBody Product product){
-        return productService.save(categoryId, product);
+    @PostMapping("/")
+    public Product product(@Valid @RequestBody Product product){
+        return productService.save(product);
     }
 
     @PutMapping("/category/{categoryId}/products/{productId}")
@@ -36,9 +35,8 @@ public class ProductResource {
         return productService.updateProduct(categoryId, productId, productRequest);
     }
 
-    @DeleteMapping("/category/{categoryId}/products/{productId}")
-    public void deleteProduct(@PathVariable (value = "categoryId") Long categoryId,
-                              @PathVariable (value = "productId") Long productId){
-        productService.delete(categoryId, productId);
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable (value = "productId") Long productId){
+        productService.delete(productId);
     }
 }

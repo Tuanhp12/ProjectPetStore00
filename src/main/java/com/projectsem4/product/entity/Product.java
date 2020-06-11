@@ -121,6 +121,7 @@ public class Product{
     public void setSales(Collection<Sale> sales) {
         this.sales = sales;
     }
+
 }
 
 //@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")

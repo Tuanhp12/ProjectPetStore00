@@ -1,4 +1,5 @@
 package com.projectsem4.product.service;
+import com.projectsem4.product.entity.Category;
 import com.projectsem4.product.entity.Product;
 import com.projectsem4.product.exception.ResourceNotFoundException;
 import com.projectsem4.product.repository.CategoryRepository;
@@ -23,14 +24,11 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Product> getAllProduct(Long categoryId){
-        return productRepository.findByCategoryId(categoryId);
+    public List<Product> getAllProduct(){
+        return productRepository.findAll();
     }
 
-    public Optional<Product> save(Long categoryId, Product product){
-
-        return categoryRepository.findById(categoryId).map(category -> {
-            product.setCategory(category);
+    public Product save(Product product){
             product.setCodeId(returnRandomId(product.getName()));
             if(product.getPrice() < 0){
                 product.setPrice(0);
@@ -38,11 +36,11 @@ public class ProductService {
             if(product.getCurrentQuantity() < 0){
                 product.setCurrentQuantity(0);
             }
+
+            return productRepository.save(product);
 //            if(product.getDateSaleStart().compareTo(product.getDateSaleEnd()) >= 0){
 //                throw new ResourceNotFoundException("End date cant occurs Start date or equal");
 //            }
-            return productRepository.save(product);
-        });
     }
 
 //    public List<Product> findAllByDateBetween( String codeIDProduct,Date dateTimeStart, Date dateTimeEnd,){
@@ -63,11 +61,9 @@ public class ProductService {
         }).orElseThrow(() -> new ResourceNotFoundException("productId " + productId + "not found"));
     }
 
-    public void delete(Long categoryId, Long productId){
-        productRepository.findByIdAndCategoryId(categoryId, productId).map(product -> {
-            productRepository.delete(product);
-            return true;
-        });
+    public void delete(Long id) {
+        log.debug("Request to delete Song : {}", id);
+        productRepository.deleteById(id);
     }
 
     public String returnRandomId(String nameProduct){
