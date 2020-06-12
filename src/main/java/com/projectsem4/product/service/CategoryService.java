@@ -27,7 +27,7 @@ public class CategoryService {
      * @param
      * @return the persisted entity
      */
-    public Category save(Category category){
+    public Category saveOrUpDate(Category category){
         logger.debug("Request to save category : {}", category);
         return categoryRepository.save(category);
     }

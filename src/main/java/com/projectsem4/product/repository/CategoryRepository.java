@@ -18,4 +18,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("select category from Category category left join fetch category.products where category.id = :id")
     Optional<Category> findOneWitEagerRelationships(@Param("id") Long id);
+
+    Category findByCategoryIdentifier(String Identifier);
 }

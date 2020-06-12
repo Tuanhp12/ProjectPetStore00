@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/product/v1")
+@CrossOrigin
 public class ProductResource {
     private final ProductService productService;
 
@@ -18,27 +19,31 @@ public class ProductResource {
         this.productService = productService;
     }
 
-    @GetMapping("/categories/{categoryId}/products")
-    public List<Product> getAllProducts(@PathVariable Long categoryId){
-        return productService.getAllProduct(categoryId);
+    @GetMapping("/all")
+    public List<Product> getAllProducts(){
+        return productService.getAllProduct();
     }
 
-    @PostMapping("/categories/{categoryId}/products")
-    public Optional<Product> product(@PathVariable (value = "categoryId") Long categoryId,
-                                    @Valid @RequestBody Product product){
-        return productService.save(categoryId, product);
+    @GetMapping("/{productId}")
+    public Product getProductById(@PathVariable String productId){
+        return productService.findProductByIdentifier(productId);
     }
 
-    @PutMapping("/category/{categoryId}/products/{productId}")
-    public Product updateProduct(@PathVariable (value = "categoryId") Long categoryId,
-                                 @PathVariable (value = "productId") Long productId,
-                                 @Valid @RequestBody Product productRequest){
-        return productService.updateProduct(categoryId, productId, productRequest);
-    }
-
-    @DeleteMapping("/category/{categoryId}/products/{productId}")
-    public void deleteProduct(@PathVariable (value = "categoryId") Long categoryId,
-                              @PathVariable (value = "productId") Long productId){
-        productService.delete(categoryId, productId);
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable (value = "productId") String productId){
+       productService.delete(productId);
     }
 }
+
+
+//@PostMapping("/")
+//    public Product product(@Valid @RequestBody Product product){
+//        return productService.saveOrUpDate(product);
+//    }
+
+//    @PutMapping("/category/{categoryId}/products/{productId}")
+//    public Product updateProduct(@PathVariable (value = "categoryId") Long categoryId,
+//                                 @PathVariable (value = "productId") Long productId,
+//                                 @Valid @RequestBody Product productRequest){
+//        return productService.updateProduct(categoryId, productId, productRequest);
+//    }

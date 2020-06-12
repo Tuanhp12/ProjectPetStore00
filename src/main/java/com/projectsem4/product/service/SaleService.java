@@ -34,9 +34,9 @@ public class SaleService {
      * @return the persisted entity
      */
 
-    public Optional<Sale> save(Long productId, Sale sale){
-        return productRepository.findById(productId).map(product -> {
-            sale.setProduct(product);
+    public Sale saveOrUpDate(Sale sale){
+
+
             if(sale.getSalePercentage() < 0){
                 throw new ResourceNotFoundException("percentage cant bellow 0");
             }
@@ -44,10 +44,10 @@ public class SaleService {
                 sale.setDescription("");
             }
             if(sale.getStatus() == null || sale.getStatus() == ""){
-                sale.setStatus("Not set this sale time yet!");
+                sale.setStatus("Not set status this sale time yet!");
             }
             return saleRepository.save(sale);
-        });
+
     }
 
     /**
@@ -91,10 +91,8 @@ public class SaleService {
      *
      * @param saleId the id of the entity.
      */
-    public void delete(Long productId, Long saleId){
-        saleRepository.findByIdAndProductId(productId, saleId).map(sale -> {
-            saleRepository.delete(sale);
-            return true;
-        });
+    public void delete(Long id) {
+        logger.debug("Request to delete Song : {}", id);
+        productRepository.deleteById(id);
     }
 }
