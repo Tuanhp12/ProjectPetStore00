@@ -13,11 +13,14 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByCategoryId(Long categoryId);
-    Optional<Product> findByIdAndCategoryId(Long id, Long categoryId);
+    Product findByProductIdentifier(String productId);
 
-    @Query("select p from Product p inner join Sale s where :datetime >= s.dateSaleStart and :datetime <= s.dateSaleEnd")
-    List<Sale> findAllWithDatetimeAfter(@Param("datetime") Date datetime);
+    List<Product> findByProductIdentifierOrderByPriority(String id);
+//    List<Product> findByCategoryId(Long categoryId);
+//    Optional<Product> findByIdAndCategoryId(Long id, Long categoryId);
+//
+//    @Query("select p from Product p inner join Sale s where :datetime >= s.dateSaleStart and :datetime <= s.dateSaleEnd")
+//    List<Sale> findAllWithDatetimeAfter(@Param("datetime") Date datetime);
 
 //    @Query("SELECT new com.projectsem4.product.entity.SearchProductByAdmin(p.codeId,p.name,s.dateSaleStart,s.dateSaleEnd,s.salePercentage,s.status)" +
 //            "FROM Product p inner join p.sales s " +

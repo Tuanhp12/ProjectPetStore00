@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/sale/v1")
+@CrossOrigin
 public class SaleResource {
     private final SaleService saleService;
 
@@ -20,7 +21,7 @@ public class SaleResource {
 
     @PostMapping("/")
     public Sale createSale(@Valid @RequestBody Sale sale){
-        return saleService.save(sale);
+        return saleService.saveOrUpDate(sale);
     }
 
     @GetMapping("/")
@@ -28,15 +29,15 @@ public class SaleResource {
         return saleService.findAll();
     }
 
-    @PutMapping("/product/{productId}/sales/{saleId}")
-    public Sale updateProduct(@PathVariable (value = "productId") Long productId,
-                                 @PathVariable (value = "saleId") Long saleId,
-                                 @Valid @RequestBody Sale saleRequest){
-        return saleService.updateSale(productId, productId, saleRequest);
-    }
-
     @DeleteMapping("/{saleId}")
     public void deleteProduct(@PathVariable (value = "saleId") Long saleId){
         saleService.delete(saleId);
     }
 }
+
+//@PutMapping("/product/{productId}/sales/{saleId}")
+//    public Sale updateProduct(@PathVariable (value = "productId") Long productId,
+//                                 @PathVariable (value = "saleId") Long saleId,
+//                                 @Valid @RequestBody Sale saleRequest){
+//        return saleService.updateSale(productId, productId, saleRequest);
+//    }

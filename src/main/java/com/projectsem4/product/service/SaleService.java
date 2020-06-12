@@ -34,7 +34,7 @@ public class SaleService {
      * @return the persisted entity
      */
 
-    public Sale save(Sale sale){
+    public Sale saveOrUpDate(Sale sale){
 
 
             if(sale.getSalePercentage() < 0){

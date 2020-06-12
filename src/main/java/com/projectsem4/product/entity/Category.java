@@ -2,7 +2,9 @@ package com.projectsem4.product.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -11,13 +13,16 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Integer PTSequence = 0;
+    private String categoryIdentifier;
     @NotBlank
+    @Column(updatable = false, unique = true)
     private String type;
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             mappedBy = "category")
-    private Collection<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     public Category() {
     }
@@ -42,7 +47,23 @@ public class Category {
         return products;
     }
 
-    public void setProducts(Collection<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public Integer getPTSequence() {
+        return PTSequence;
+    }
+
+    public void setPTSequence(Integer PTSequence) {
+        this.PTSequence = PTSequence;
+    }
+
+    public String getCategoryIdentifier() {
+        return categoryIdentifier;
+    }
+
+    public void setCategoryIdentifier(String categoryIdentifier) {
+        this.categoryIdentifier = categoryIdentifier;
     }
 }
