@@ -8,4 +8,6 @@ import javax.persistence.Entity;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    Customer findByCustomerIdentifier(String customerId);
+
 }

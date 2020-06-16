@@ -55,7 +55,7 @@ public class Product{
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date update_At;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", updatable = false,nullable = false)
     @JsonIgnore
     private Category category;
