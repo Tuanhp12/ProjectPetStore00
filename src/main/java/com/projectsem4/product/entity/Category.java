@@ -13,15 +13,16 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer PTSequence = 0;
+    private Integer PTSequence = 0; // PT = Product
     private String categoryIdentifier;
     @NotBlank
     @Column(updatable = false, unique = true)
     private String type;
 
-    @OneToMany(cascade = CascadeType.ALL,
+    @OneToMany(cascade = CascadeType.REFRESH,
             fetch = FetchType.EAGER,
-            mappedBy = "category")
+            mappedBy = "category",
+            orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
     public Category() {

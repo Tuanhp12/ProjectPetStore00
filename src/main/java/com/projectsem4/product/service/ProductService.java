@@ -81,18 +81,66 @@ public class ProductService {
        }
     }
 
+    public String returnRandomId(String nameProduct){
+        String defaultFirstTwoCharacter = nameProduct.substring(0,2);
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+
+        StringBuilder s = new StringBuilder();
+        int x;
+        for( x = 0; x < 5; x++) {
+            int index = (int) (AlphaNumericString.length() * Math.random());
+            s.append(AlphaNumericString.charAt(index));
+        }
+        return defaultFirstTwoCharacter + s.toString();
+    }
+
     public Iterable<Product> findCategoryById(String id){
-        List<Product> products = getAllProduct();
-        List<Product> listProductByCategory = new ArrayList<>();
-        for(Product product: products){
-            if(product.getCategoryIdentifier().equals(id)){
-                listProductByCategory.add(product);
-            }
+
+        Category category = categoryRepository.findByCategoryIdentifier(id);
+
+        if(category==null){
+            throw new CategoryNotFoundException("Project with ID: '"+id+"' does not exist");
         }
-        if(listProductByCategory == null){
-            throw new CategoryNotFoundException("Category with Id" + id + "does not exits");
+
+        return productRepository.findByProductIdentifierOrderByPriority(id);
+
+//        List<Product> products = getAllProduct();
+//        List<Product> listProductByCategory = new ArrayList<>();
+//        for(Product product: products){
+//            if(product.getCategoryIdentifier().equals(id)){
+//                listProductByCategory.add(product);
+//            }
+//        }
+//        if(listProductByCategory == null){
+//            throw new CategoryNotFoundException("Category with Id" + id + "does not exits");
+//        }
+//        return listProductByCategory;
+
+
+    }
+
+    public Product findProductByProductSequence(String categoryId, String sequence){
+
+        //make sure to searching in the right category
+        Category category = categoryRepository.findByCategoryIdentifier(categoryId);
+        if(category == null){
+            throw new CategoryNotFoundException("Category with Id " + categoryId + " does not exits");
         }
-        return listProductByCategory;
+
+        //make sure that our task exists
+        Product product = productRepository.findByProductSequence(sequence);
+        if(product == null){
+            throw new CategoryNotFoundException("Product " + sequence + " not found");
+        }
+
+        //make sure that the product is in the path corresponds to the right category
+        if(!product.getCategoryIdentifier().equals(categoryId)){
+            throw new CategoryNotFoundException("Product " + sequence + " does not exist in category " + categoryId);
+        }
+
+        return product;
     }
 
     public List<Product> getAllProduct(){
@@ -108,6 +156,14 @@ public class ProductService {
         return product;
     }
 
+    public Product updateByCategorySequence(Product updateProduct, String categoryId, String productId){
+        Product product = findProductByProductSequence(categoryId, productId);
+
+        product = updateProduct;
+
+        return productRepository.save(product);
+    }
+
     public void delete(String id) {
         log.debug("Request to delete Song : {}", id);
         Product product = productRepository.findByProductIdentifier(id);
@@ -119,19 +175,15 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public String returnRandomId(String nameProduct){
-        String defaultFirstTwoCharacter = nameProduct.substring(0,2);
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                     + "0123456789"
-                                     + "abcdefghijklmnopqrstuvxyz";
+    public void deleteProductByProductSequence(String categoryId, String productId){
+        Product product = findProductByProductSequence(categoryId, productId);
 
-        StringBuilder s = new StringBuilder();
-        int x;
-        for( x = 0; x < 5; x++) {
-            int index = (int) (AlphaNumericString.length() * Math.random());
-            s.append(AlphaNumericString.charAt(index));
-        }
-        return defaultFirstTwoCharacter + s.toString();
+//        Category category = product.getCategory();
+//        List<Product> products = (List<Product>) category.getProducts();
+//        products.remove(product);
+//        categoryRepository.save(category);
+
+        productRepository.delete(product);
     }
 }
 

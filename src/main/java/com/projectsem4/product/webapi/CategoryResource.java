@@ -4,9 +4,12 @@ import com.projectsem4.product.entity.Category;
 import com.projectsem4.product.entity.Product;
 import com.projectsem4.product.exception.ResourceNotFoundException;
 import com.projectsem4.product.service.CategoryService;
+import com.projectsem4.product.service.MapValidationErrorService;
 import com.projectsem4.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,13 +22,13 @@ public class CategoryResource {
 
     private final CategoryService categoryService;
     private final ProductService productService;
+    private final MapValidationErrorService mapValidationErrorService;
 
-    public CategoryResource(CategoryService categoryService, ProductService productService) {
+    public CategoryResource(CategoryService categoryService, ProductService productService, MapValidationErrorService mapValidationErrorService) {
         this.categoryService = categoryService;
         this.productService = productService;
+        this.mapValidationErrorService = mapValidationErrorService;
     }
-
-
 
     @PostMapping("/")
     public Category createCategory(@Valid @RequestBody Category category){
@@ -48,17 +51,36 @@ public class CategoryResource {
         return productService.findCategoryById(categoryId);
     }
 
+    @GetMapping("/{categoryId}/{productId}")
+    public ResponseEntity<?> getProduct(@PathVariable String categoryId, @PathVariable String productId){
+        Product product = productService.findProductByProductSequence(categoryId,productId);
+
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
+    }
+
+    @PutMapping("/{categoryId}/{productId}")
+    public ResponseEntity<?> updateProduct(@PathVariable String categoryId, @Valid @RequestBody Product productRequest,
+                                           @PathVariable String productId, BindingResult result){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null) return errorMap;
+
+        Product updateProduct = productService.updateByCategorySequence(productRequest,categoryId,productId);
+        return new ResponseEntity<Product>(updateProduct, HttpStatus.OK);
+
+    }
+
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId){
         categoryService.delete(categoryId);
         return ResponseEntity.ok().build();
     }
 
-//    @PutMapping("/{categoryId}")
-//    public Category updateCategory(@PathVariable Long categoryId, @Valid @RequestBody Category categoryRequest){
-//        return categoryService.findOne(categoryId).map(category -> {
-//            category.setType(categoryRequest.getType());
-//            return categoryService.save(category);
-//        }).orElseThrow(() -> new ResourceNotFoundException("CategoryId " + categoryId + "not found"));
-//    }
+    @DeleteMapping("/{categoryId}/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable String categoryId, @PathVariable String productId){
+        productService.deleteProductByProductSequence(categoryId, productId);
+        return new ResponseEntity<String>("Product " + productId + " was deleted successfully", HttpStatus.OK);
+    }
+
+
+
 }

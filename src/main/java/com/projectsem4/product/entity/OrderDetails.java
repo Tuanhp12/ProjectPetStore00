@@ -25,8 +25,9 @@ public class OrderDetails {
     private Product product;
 
     @NotNull
-    private int amount;
+    private Integer amount;
 
+    private double priceEach;
 //    @Temporal(TemporalType.TIMESTAMP)
 //    @Column(name = "update_at")
 //    @CreatedDate
@@ -51,11 +52,20 @@ public class OrderDetails {
         this.product = product;
     }
 
-    public int getAmount() {
+
+    public ListOrder getListOrder() {
+        return listOrder;
+    }
+
+    public void setListOrder(ListOrder listOrder) {
+        this.listOrder = listOrder;
+    }
+
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 }
